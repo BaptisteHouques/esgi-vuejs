@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+
+import Detail from "@/components/ProductDetail.vue";
+import Search from "@/components/ProductSearch.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <Search></Search>
+    <Detail></Detail>
   </main>
 </template>
