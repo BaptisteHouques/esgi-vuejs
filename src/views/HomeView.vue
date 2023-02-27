@@ -4,11 +4,9 @@ import ShowSearchResults from "@/components/ShowSearchResultsComponent.vue";
 </script>
 
 <template>
-  <main>
-    <h1>Search</h1>
-    <SearchBar @emitResults = "listFood = $event " />
-    <ShowSearchResults />
-  </main>
+  <h1>Search</h1>
+  <SearchBar @emitResults = "listFood = $event " />
+  <ShowSearchResults :products="products" />
 </template>
 
 <script lang="ts">
