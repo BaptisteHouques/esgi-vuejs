@@ -6,7 +6,17 @@ import ShowSearchResults from "@/components/ShowSearchResultsComponent.vue";
 <template>
   <main>
     <h1>Search</h1>
-    <SearchBar />
+    <SearchBar @emitResults = "listFood = $event " />
     <ShowSearchResults />
   </main>
 </template>
+
+<script lang="ts">
+export default {
+  data() {
+    return {
+      listFood: [],
+    }
+  }
+}
+</script>
