@@ -3,19 +3,26 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <v-app>
+    <v-app-bar :elevation="2">
+        <img id="app-icon" src="@/assets/images/calories.png" alt="Icon">
 
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-      </nav>
-    </div>
-  </header>
+      <RouterLink to="/">Home</RouterLink>
 
-  <RouterView />
+    </v-app-bar>
+    <main>
+      <RouterView />
+    </main>
+  </v-app>
 </template>
 
 <style scoped>
+#app-icon {
+  height: 64px;
+  margin-left: 10px;
+}
 
+main {
+  margin-top: 71px;
+}
 </style>
