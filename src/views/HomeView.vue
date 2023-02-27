@@ -1,12 +1,9 @@
 <script setup lang="ts">
-
-import Detail from "@/components/ProductDetail.vue";
-import Search from "@/components/ProductSearch.vue";
+import SearchComponent from "@/components/SearchComponent.vue";
 </script>
 
 <template>
   <main>
-    <Search></Search>
-    <Detail></Detail>
+    <SearchComponent />
   </main>
 </template>

@@ -1,10 +1,10 @@
 <template>
-
+la barre de recherche
 </template>
 
 <script>
 export default {
-  name: "Search"
+  name: "SearchBarComponent"
 }
 </script>
 
