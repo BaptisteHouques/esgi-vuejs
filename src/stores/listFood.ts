@@ -3,22 +3,17 @@ import { defineStore } from 'pinia'
 export const listFoodStore = defineStore('listFood', {
   state: () => {
     return {
-      listFood: [] as { id: number, description: string, cal: number }[],
       isLoading: false,
-      searchCache: [],
+      searchCache: [] as {search: string, results: {id: number, description: string, foodCategory: string, foodNutrients: {}[], cal: number}[]}[],
       coeff: 4.184
     }
   },
   actions: {
-    setListFood(listFood: { id: number, description: string, cal: number }[]) {
-      this.listFood = listFood
-    },
-
     setIsLoading(value: boolean) {
       this.isLoading = value
     },
 
-    addToSearchCache(value: any) {
+    addToSearchCache(value: {search: string, results: {id: number, description: string, foodCategory: string, foodNutrients: {}[], cal: number}[]}) {
       let inserted = false
       this.searchCache.forEach(el => {
         if (el.search.toUpperCase() === value.search.toUpperCase()) {
