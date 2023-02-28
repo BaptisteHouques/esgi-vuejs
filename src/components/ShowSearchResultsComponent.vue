@@ -12,7 +12,7 @@
           {{ searchEnergy(product.foodNutrients) }}
         </v-card-text>
         <v-card-actions>
-          <RouterLink :to="{ name: 'productDetail', params: { id: product.fdcId }}">Detail</RouterLink>
+          <RouterLink :to="{ name: 'productDetail', params: { id: product.id }}">Detail</RouterLink>
         </v-card-actions>
       </v-card>
     </template>
