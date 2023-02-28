@@ -12,7 +12,7 @@
       >
         <v-text-field v-model="nbrResult" :rules="nbrRules" label="Nombre de résultat" variant="outlined" hide-details="auto"></v-text-field>
       </v-responsive>
-      <v-btn id="search-btn" append-icon="mdi-magnify" v-on:click="search">
+      <v-btn id="search-btn" append-icon="mdi-magnify" v-on:click="search" :loading="getLoadingValue">
         Rechercher
       </v-btn>
       <v-alert
@@ -44,41 +44,58 @@ export default defineComponent({
   methods: {
     // Utilise l'endpoint de recherche de l'API de nutrition
     search() {
-      if (this.nbrResult <= 50) {
-        axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
+      listFoodStore().setIsLoading(true)
+      let existInCache = false
+
+      listFoodStore().searchCache.forEach(el => {
+        if (el.search.toUpperCase() === this.query.toUpperCase()) {
+          existInCache = el
+          return
+        }
+      })
+
+      if (!existInCache && this.nbrResult <= 50) {
+         axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
             .then((response) => {
-              // Définition du type de la réponse de l'API
-              let listFood: {
-                fdcId: number,
-                description: string,
-                foodNutrients: {
-                  nutrientName: string,
-                  value: number
-                }[]
-              }[]
-
-              listFood = response.data.foods
-              let newListFood: { id: number, description: string, cal: number }[] = []
-
-              // Création d'une nouvelle liste avec seulement les propriétés recherchées
-              listFood.forEach(food => {
-                let tempObject = {id: food.fdcId, description: food.description, cal: 0}
-                food.foodNutrients.forEach(fd => {
-                  if (fd.nutrientName === "Energy")
-                    tempObject.cal = fd.value
-                })
-                newListFood.push(tempObject)
+              // // Define Response Type
+              // let listFood: {
+              //   fdcId: number,
+              //   description: string,
+              //   foodNutrients: {
+              //     nutrientName: string,
+              //     nutrientNumber: number
+              //   }[]
+              // }[]
+              //
+              // listFood = response.data.foods
+              // let newListFood: {id: number, description: string, cal: number}[] = []
+              //
+              // listFood.forEach(food => {
+              //   let tempObject = {id: food.fdcId, description: food.description, cal: 0}
+              //   food.foodNutrients.forEach(fd => {
+              //     if (fd.nutrientName === "Energy")
+              //       tempObject.cal = fd.nutrientNumber
+              //   })
+              //   newListFood.push(tempObject)
+              // })
+              // listFoodStore().setListFood(newListFood)
+              listFoodStore().addToSearchCache({
+                search: this.query,
+                results: response.data.foods
               })
 
-              // Ajout de la listFood dans le store
-              listFoodStore().setListFood(newListFood)
-
-              // Passage de la reponse de l'API au composant parent
+              console.log('jutilise lapi')
               this.$emit("emitResults", response.data.foods)
+              listFoodStore().setIsLoading(false)
             })
             .catch((error) => {
+              console.log(error)
               this.showError(error)
             });
+      } else {
+        console.log('jutilise le cache')
+        this.$emit("emitResults", existInCache.results)
+        listFoodStore().setIsLoading(false)
       }
     },
 
@@ -94,6 +111,11 @@ export default defineComponent({
                 break
         }
       }
+    }
+  },
+  computed: {
+    getLoadingValue() {
+      return listFoodStore().isLoading
     }
   }
 })
