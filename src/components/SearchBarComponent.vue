@@ -57,35 +57,45 @@ export default defineComponent({
       if (!existInCache && this.nbrResult <= 50) {
          axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
             .then((response) => {
-              // // Define Response Type
-              // let listFood: {
-              //   fdcId: number,
-              //   description: string,
-              //   foodNutrients: {
-              //     nutrientName: string,
-              //     nutrientNumber: number
-              //   }[]
-              // }[]
-              //
-              // listFood = response.data.foods
-              // let newListFood: {id: number, description: string, cal: number}[] = []
-              //
-              // listFood.forEach(food => {
-              //   let tempObject = {id: food.fdcId, description: food.description, cal: 0}
-              //   food.foodNutrients.forEach(fd => {
-              //     if (fd.nutrientName === "Energy")
-              //       tempObject.cal = fd.nutrientNumber
-              //   })
-              //   newListFood.push(tempObject)
-              // })
-              // listFoodStore().setListFood(newListFood)
+              // Define Response Type
+              let listFood: {
+                fdcId: number,
+                description: string,
+                foodCategory: string,
+                foodNutrients: {
+                  nutrientName: string,
+                  nutrientNumber: number
+                }[]
+              }[]
+
+              listFood = response.data.foods
+              let newListFood: {
+                id: number,
+                description: string,
+                foodCategory: string,
+                foodNutrients: {
+                  nutrientName: string,
+                  nutrientNumber: number
+                }[],
+                cal: number
+              }[] = []
+
+              listFood.forEach(food => {
+                let tempObject = {id: food.fdcId, description: food.description, foodCategory: food.foodCategory, foodNutrients: food.foodNutrients, cal: 0}
+                food.foodNutrients.forEach(fd => {
+                  if (fd.nutrientName === "Energy")
+                    tempObject.cal = fd.nutrientNumber
+                })
+                newListFood.push(tempObject)
+              })
+              console.log(newListFood)
               listFoodStore().addToSearchCache({
                 search: this.query,
-                results: response.data.foods
+                results: newListFood
               })
 
               console.log('jutilise lapi')
-              this.$emit("emitResults", response.data.foods)
+              this.$emit("emitResults", newListFood)
               listFoodStore().setIsLoading(false)
             })
             .catch((error) => {
