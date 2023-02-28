@@ -1,24 +1,56 @@
 <template>
-  <input v-model="query">
+<!--  <v-input v-model="query" />-->
+  <v-text-field v-model="query"></v-text-field>
   <button v-on:click="search">button</button>
 </template>
 
 <script lang="ts">
 import axios, {AxiosError} from "axios";
 import { defineComponent } from "vue";
+import { listFoodStore } from '@/stores/listFood'
 
 export default defineComponent({
   name: "SearchBarComponent",
   data () {
     return {
-      query: ""
+      listTest: ['test'],
+      query: "",
+      list: [] as {
+        id: 0,
+        name: ''
+      }[]
     }
   },
   emits: ["emitResults"],
   methods: {
     search() {
-      axios.get(import.meta.env.VITE_API_URL + "searc" + "?query=" + this.query + "&pageSize=1" + "&" + import.meta.env.VITE_API_KEY)
+      axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=10" + "&" + import.meta.env.VITE_API_KEY)
           .then((response) => {
+            // Define Response Type
+            let listFood: {
+              fdcId: number,
+              description: string,
+              foodNutrients: {
+                nutrientName: string,
+                nutrientNumber: number
+              }[]
+            }[]
+
+            listFood = response.data.foods
+            let newListFood: {id: number, description: string, cal: number}[] = []
+
+            listFood.forEach(food => {
+              let tempObject = {id: food.fdcId, description: food.description, cal: 0}
+              food.foodNutrients.forEach(fd => {
+                if (fd.nutrientName === "Energy")
+                  tempObject.cal = fd.nutrientNumber
+              })
+              newListFood.push(tempObject)
+            })
+            listFoodStore().setListFood(newListFood)
+
+            // listFoodStore().setter(response.data.foods)
+            console.log(listFoodStore().listFood)
             this.$emit("emitResults", response.data.foods)
           })
           .catch((error) => {
