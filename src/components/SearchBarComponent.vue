@@ -1,7 +1,14 @@
 <template>
-<!--  <v-input v-model="query" />-->
-  <v-text-field v-model="query"></v-text-field>
-  <button v-on:click="search">button</button>
+    <v-text-field
+        label="Produit"
+        hide-details="auto"
+        v-model="query"
+    ></v-text-field>
+    <div id="search-btn-div">
+      <v-btn id="search-btn" append-icon="mdi-magnify" v-on:click="search">
+        Rechercher
+      </v-btn>
+    </div>
 </template>
 
 <script lang="ts">
@@ -76,5 +83,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#search-btn {
+  margin-top: 15px;
+}
 
+#search-btn-div {
+  width: 100%;
+  text-align: center;
+}
 </style>

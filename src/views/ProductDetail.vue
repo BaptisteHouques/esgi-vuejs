@@ -18,7 +18,6 @@ export default defineComponent({
   mounted() {
     axios.get(import.meta.env.VITE_API_URL + "food/" + this.$route.params.id + "?" + import.meta.env.VITE_API_KEY)
       .then(response => {
-        console.log(response.data)
         this.product = response.data
       })
       .catch(error => {
