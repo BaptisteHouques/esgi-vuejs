@@ -2,23 +2,25 @@ import { defineStore } from 'pinia'
 
 export const listFoodStore = defineStore('listFood', {
   state: () => {
-    return { listFood: [] as { id: number, description: string, cal: number }[] }
-  },
-  getters: {
-
+    return {
+      listFood: [] as { id: number, description: string, cal: number }[],
+      coeff: 4.184
+    }
   },
   actions: {
-    // addItem(item: {id: number}) {
-    //   this.listFood.push(item)
-    // }
     setListFood(listFood: { id: number, description: string, cal: number }[]) {
       this.listFood = listFood
+    },
+
+    // Function that convert Kcal to Kj
+    convertListToKj() {
+      let list = this.listFood
+      list.forEach(el => el.cal = el.cal * this.coeff)
+      return list
+    },
+
+    convertToKj(cal: number): number {
+      return cal * this.coeff
     }
   }
-
-  // actions: {
-  //   toKJ() {
-  //     this.listFood
-  //   },
-  // },
 })
