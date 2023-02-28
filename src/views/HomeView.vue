@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SearchBar from "@/components/SearchBarComponent.vue";
-import ShowSearchResults from "@/components/ShowSearchResultsComponent.vue";
 </script>
 
 <template>
@@ -10,11 +9,16 @@ import ShowSearchResults from "@/components/ShowSearchResultsComponent.vue";
 </template>
 
 <script lang="ts">
+import { listFoodStore } from '@/stores/listFood'
+
 export default {
   data() {
     return {
       listFood: [],
     }
+  },
+  computed: {
+    console: () => listFoodStore()
   }
 }
 </script>
