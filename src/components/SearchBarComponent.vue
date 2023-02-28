@@ -5,9 +5,23 @@
         v-model="query"
     ></v-text-field>
     <div id="search-btn-div">
+      <v-responsive
+          id="nbrChoice"
+          class="mx-auto"
+          max-width="170"
+      >
+        <v-text-field v-model="nbrResult" :rules="nbrRules" label="Nombre de résultat" variant="outlined" hide-details="auto"></v-text-field>
+      </v-responsive>
       <v-btn id="search-btn" append-icon="mdi-magnify" v-on:click="search" :loading="getLoadingValue">
         Rechercher
       </v-btn>
+      <v-alert
+          id="alertBox"
+          v-if="alert.title"
+          type="error"
+          :title="alert.title"
+          :text="alert.desc"
+      ></v-alert>
     </div>
 </template>
 
@@ -21,10 +35,14 @@ export default defineComponent({
   data () {
     return {
       query: "",
+      nbrResult: 10,
+      nbrRules: [(v: number) => ( v && v <= 50 ) || "La valeur maximale est de 50"],
+      alert: {} as {title: string, desc: string}
     }
   },
   emits: ["emitResults"],
   methods: {
+    // Utilise l'endpoint de recherche de l'API de nutrition
     search() {
       listFoodStore().setIsLoading(true)
       let existInCache = false
@@ -36,8 +54,8 @@ export default defineComponent({
         }
       })
 
-      if (!existInCache) {
-        axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=10" + "&" + import.meta.env.VITE_API_KEY)
+      if (!existInCache && this.nbrResult <= 50) {
+         axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
             .then((response) => {
               // // Define Response Type
               // let listFood: {
@@ -80,17 +98,18 @@ export default defineComponent({
         listFoodStore().setIsLoading(false)
       }
     },
+
+    // Fonction d'affichage des erreurs de l'API à l'utilisateur
     showError(error: AxiosError) {
       if (error.response) {
         switch (error.response.status){
           case 400:
-            console.log("erreur dans la requête")
+            this.alert = {title: "Erreur 400", desc: "Erreur lors de la recherche, veuillez réessayer."}
                 break
           case 500:
-            console.log('erreur server')
+            this.alert = {title: "Erreur 500", desc: "Problème avec le serveur distant, réessayer plus tard."}
                 break
         }
-
       }
     }
   },
@@ -104,11 +123,20 @@ export default defineComponent({
 
 <style scoped>
 #search-btn {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 #search-btn-div {
   width: 100%;
   text-align: center;
+}
+
+#nbrChoice {
+  margin-top: 5px;
+  padding-top: 5px;
+}
+
+#alertBox {
+  margin-top: 10px;
 }
 </style>

@@ -5,16 +5,11 @@ export const listFoodStore = defineStore('listFood', {
     return {
       listFood: [] as { id: number, description: string, cal: number }[],
       isLoading: false,
-      searchCache: []
+      searchCache: [],
+      coeff: 4.184
     }
   },
-  getters: {
-
-  },
   actions: {
-    // addItem(item: {id: number}) {
-    //   this.listFood.push(item)
-    // }
     setListFood(listFood: { id: number, description: string, cal: number }[]) {
       this.listFood = listFood
     },
@@ -27,11 +22,16 @@ export const listFoodStore = defineStore('listFood', {
       // @ts-ignore
       this.searchCache.push(value)
     }
-  }
+    
+    // Function that convert Kcal to Kj
+    convertListToKj() {
+      let list = this.listFood
+      list.forEach(el => el.cal = el.cal * this.coeff)
+      return list
+    },
 
-  // actions: {
-  //   toKJ() {
-  //     this.listFood
-  //   },
-  // },
+    convertToKj(cal: number): number {
+      return cal * this.coeff
+    }
+  }
 })

@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import {listFoodStore} from "@/stores/listFood";
+import { listFoodStore } from '@/stores/listFood'
 
 export default {
   name: "ShowSearchResultsComponent",
@@ -42,9 +42,11 @@ export default {
       let energy = "Pas d'infos sur les calories"
       Object.keys(nutrients).forEach(key => {
         if (nutrients[key].nutrientName === 'Energy') {
-          energy = `Calories: ${nutrients[key].value} ${nutrients[key].unitName}`
+          let kj = listFoodStore().convertToKj(nutrients[key].value).toFixed(2)
+          energy = `Calories: ${nutrients[key].value} ${nutrients[key].unitName} (${kj} KJ)`
         }
       });
+
       return energy
     }
   },
