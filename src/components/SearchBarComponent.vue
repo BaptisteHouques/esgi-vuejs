@@ -46,15 +46,17 @@ export default defineComponent({
     search() {
       listFoodStore().setIsLoading(true)
       let existInCache = false
+      let cacheElement = []
 
       listFoodStore().searchCache.forEach(el => {
         if (el.search.toUpperCase() === this.query.toUpperCase()) {
-          existInCache = el
+          existInCache = true
+          cacheElement = el
           return
         }
       })
 
-      if (!existInCache && this.nbrResult <= 50) {
+      if ((!existInCache || cacheElement.results.length < this.nbrResult) && this.nbrResult <= 50) {
          axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
             .then((response) => {
               // Define Response Type
@@ -104,7 +106,7 @@ export default defineComponent({
             });
       } else {
         console.log('jutilise le cache')
-        this.$emit("emitResults", existInCache.results)
+        this.$emit("emitResults", cacheElement.results.slice(0, this.nbrResult))
         listFoodStore().setIsLoading(false)
       }
     },
