@@ -11,7 +11,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
     </v-app-bar>
     <main>
-      <RouterView />
+      <v-container>
+        <RouterView />
+      </v-container>
     </main>
   </v-app>
 </template>

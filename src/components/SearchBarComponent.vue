@@ -1,6 +1,14 @@
 <template>
-  <input v-model="query">
-  <button v-on:click="search">button</button>
+    <v-text-field
+        label="Produit"
+        hide-details="auto"
+        v-model="query"
+    ></v-text-field>
+    <div id="search-btn-div">
+      <v-btn id="search-btn" append-icon="mdi-magnify" v-on:click="search">
+        Rechercher
+      </v-btn>
+    </div>
 </template>
 
 <script lang="ts">
@@ -17,7 +25,7 @@ export default defineComponent({
   emits: ["emitResults"],
   methods: {
     search() {
-      axios.get(import.meta.env.VITE_API_URL + "searc" + "?query=" + this.query + "&pageSize=1" + "&" + import.meta.env.VITE_API_KEY)
+      axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=10" + "&" + import.meta.env.VITE_API_KEY)
           .then((response) => {
             this.$emit("emitResults", response.data.foods)
           })
@@ -44,5 +52,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#search-btn {
+  margin-top: 15px;
+}
 
+#search-btn-div {
+  width: 100%;
+  text-align: center;
+}
 </style>
