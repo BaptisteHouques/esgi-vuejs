@@ -19,9 +19,17 @@ export const listFoodStore = defineStore('listFood', {
     },
 
     addToSearchCache(value: any) {
-      // @ts-ignore
-      this.searchCache.push(value)
-    }
+      let inserted = false
+      this.searchCache.forEach(el => {
+        if (el.search.toUpperCase() === value.search.toUpperCase()) {
+          el.results = value.results
+          inserted = true
+        }
+      })
+      if (!inserted) {
+        this.searchCache.push(value)
+      }
+    },
     
     // Function that convert Kcal to Kj
     convertListToKj() {
