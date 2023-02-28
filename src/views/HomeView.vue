@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import SearchBar from "@/components/SearchBarComponent.vue";
+import ShowSearchResults from "@/components/ShowSearchResultsComponent.vue";
 </script>
 
 <template>
-  <h1>Search</h1>
+  <h1>Chercher un produit</h1>
   <SearchBar @emitResults = "listFood = $event " />
   <ShowSearchResults :products="listFood" />
 </template>
 
 <script lang="ts">
-import { listFoodStore } from '@/stores/listFood'
 
 export default {
   data() {
@@ -17,8 +17,5 @@ export default {
       listFood: [],
     }
   },
-  computed: {
-    console: () => listFoodStore()
-  }
 }
 </script>
