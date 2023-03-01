@@ -25,13 +25,6 @@ export const listFoodStore = defineStore('listFood', {
         this.searchCache.push(value)
       }
     },
-    
-    // Function that convert Kcal to Kj
-    convertListToKj() {
-      let list = this.listFood
-      list.forEach(el => el.cal = el.cal * this.coeff)
-      return list
-    },
 
     convertToKj(cal: number): number {
       return cal * this.coeff

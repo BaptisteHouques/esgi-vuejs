@@ -8,17 +8,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { transition: 'slide-left' },
     },
     {
       path: '/products/',
       name: 'products',
-      component: ProductDetail
+      component: ProductDetail,
+      meta: { transition: 'slide-left' },
     },
     {
       path: '/products/:id',
       name: 'productDetail',
-      component: ProductDetail
+      component: ProductDetail,
+      meta: { transition: 'slide-left' },
     }
 
   ]
