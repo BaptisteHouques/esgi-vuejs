@@ -74,7 +74,6 @@ export default defineComponent({
                 })
                 newListFood.push(tempObject)
               })
-              console.log(newListFood)
               listFoodStore().addToSearchCache({
                 search: this.query,
                 results: newListFood
@@ -87,6 +86,7 @@ export default defineComponent({
             .catch((error) => {
               console.log(error)
               this.showError(error)
+              listFoodStore().setIsLoading(false)
             });
       } else {
         console.log('jutilise le cache')

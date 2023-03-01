@@ -26,7 +26,7 @@ export const listFoodStore = defineStore('listFood', {
         this.searchCache.push(value)
       }
     },
-    
+
     convertToKj(cal: number): number {
       return cal * this.coeff
     }
