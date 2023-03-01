@@ -29,6 +29,7 @@
 import axios, {AxiosError} from "axios";
 import { defineComponent } from "vue";
 import { listFoodStore } from '@/stores/listFood'
+import type ProductInterface from "@/interfaces/ProductInterface";
 
 export default defineComponent({
   name: "SearchBarComponent",
@@ -46,7 +47,7 @@ export default defineComponent({
     search() {
       listFoodStore().setIsLoading(true)
       let existInCache = false
-      let cacheElement = []
+      let cacheElement: {search: string, results: ProductInterface[]} = {search: "", results: []}
 
       listFoodStore().searchCache.forEach(el => {
         if (el.search.toUpperCase() === this.query.toUpperCase()) {
@@ -60,30 +61,13 @@ export default defineComponent({
          axios.get(import.meta.env.VITE_API_URL + "search" + "?query=" + this.query + "&pageSize=" + this.nbrResult + "&" + import.meta.env.VITE_API_KEY)
             .then((response) => {
               // Define Response Type
-              let listFood: {
-                fdcId: number,
-                description: string,
-                foodCategory: string,
-                foodNutrients: {
-                  nutrientName: string,
-                  nutrientNumber: number
-                }[]
-              }[]
+              let listFood: ProductInterface[]
 
               listFood = response.data.foods
-              let newListFood: {
-                id: number,
-                description: string,
-                foodCategory: string,
-                foodNutrients: {
-                  nutrientName: string,
-                  nutrientNumber: number
-                }[],
-                cal: number
-              }[] = []
+              let newListFood: ProductInterface[] = []
 
               listFood.forEach(food => {
-                let tempObject = {id: food.fdcId, description: food.description, foodCategory: food.foodCategory, foodNutrients: food.foodNutrients, cal: 0}
+                let tempObject = food
                 food.foodNutrients.forEach(fd => {
                   if (fd.nutrientName === "Energy")
                     tempObject.cal = fd.nutrientNumber

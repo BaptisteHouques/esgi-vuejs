@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
+import type ProductInterface from "@/interfaces/ProductInterface";
 
 export const listFoodStore = defineStore('listFood', {
   state: () => {
     return {
       isLoading: false,
-      searchCache: [] as {search: string, results: {id: number, description: string, foodCategory: string, foodNutrients: {}[], cal: number}[]}[],
+      searchCache: [] as {search: string, results: ProductInterface[]}[],
       coeff: 4.184
     }
   },
@@ -13,7 +14,7 @@ export const listFoodStore = defineStore('listFood', {
       this.isLoading = value
     },
 
-    addToSearchCache(value: {search: string, results: {id: number, description: string, foodCategory: string, foodNutrients: {}[], cal: number}[]}) {
+    addToSearchCache(value: {search: string, results: ProductInterface[]}) {
       let inserted = false
       this.searchCache.forEach(el => {
         if (el.search.toUpperCase() === value.search.toUpperCase()) {
