@@ -6,6 +6,6 @@ export default interface ProductInterface {
     foodNutrients: {
         nutrientName: string,
         nutrientNumber: number,
-        nutrientUnitName: string
+        unitName: string
     }[];
 }
