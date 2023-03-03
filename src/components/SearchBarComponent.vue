@@ -79,7 +79,6 @@ export default defineComponent({
                 results: newListFood
               })
 
-              console.log('jutilise lapi')
               this.$emit("emitResults", newListFood)
               listFoodStore().setIsLoading(false)
             })
@@ -89,7 +88,6 @@ export default defineComponent({
               listFoodStore().setIsLoading(false)
             });
       } else {
-        console.log('jutilise le cache')
         this.$emit("emitResults", cacheElement.results.slice(0, this.nbrResult))
         listFoodStore().setIsLoading(false)
       }
