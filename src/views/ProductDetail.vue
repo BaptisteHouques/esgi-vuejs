@@ -33,7 +33,6 @@ export default defineComponent({
       search.results.forEach(result => {
         if (result.fdcId.toString() === this.$route.params.id) {
           this.product = result
-          console.log('en cache')
           isInCache = true
           listFoodStore().setIsLoading(false)
         }
@@ -41,7 +40,6 @@ export default defineComponent({
     })
 
     if (!isInCache) {
-      console.log('pas en cache')
       axios.get(import.meta.env.VITE_API_URL + "food/" + this.$route.params.id + "?" + import.meta.env.VITE_API_KEY)
         .then((response) => {
           //Product recovered by this route doesn't have the same properties as ProductInterface

@@ -28,22 +28,20 @@
 
 <script lang="ts">
 import { listFoodStore } from '@/stores/listFood'
+import type ProductInterface from "@/interfaces/ProductInterface";
 
 export default {
   name: "ShowSearchResultsComponent",
   props: {
-    products: Array
+    products: {} as ProductInterface[]
   },
   methods: {
-    searchEnergy(nutrients: { [x: string]: {
-        value: any;
-        nutrientName: string; unitName: any;
-      }; }) {
+    searchEnergy(nutrients: { value: number; nutrientName: string; unitName: number }[]) {
       let energy = "Pas d'infos sur les calories"
-      Object.keys(nutrients).forEach(key => {
-        if (nutrients[key].nutrientName === 'Energy') {
-          let kj = listFoodStore().convertToKj(nutrients[key].value).toFixed(2)
-          energy = `Calories: ${nutrients[key].value} ${nutrients[key].unitName} (${kj} KJ)`
+      nutrients.forEach(nutrient => {
+        if (nutrient.nutrientName === 'Energy') {
+          let kj = listFoodStore().convertToKj(nutrient.value).toFixed(2)
+          energy = `Calories: ${nutrient.value} ${nutrient.unitName} (${kj} KJ)`
         }
       });
 
